@@ -1,0 +1,7 @@
+.maze{
+    position: relative;
+    display: block;
+    width: 80%;
+    height: 80%;
+    background-color: aqua;
+}
