@@ -1,0 +1,13 @@
+.game{
+    position: relative;
+    display: grid;
+    grid-template-columns:repeat(3, 1fr);
+    grid-template-rows: 50px auto;
+    grid-template-areas: 
+    "A  B  C" 
+    "D  D  D";
+    background-color: brown;
+    width: 90vh;
+    height: 90vh;
+
+}

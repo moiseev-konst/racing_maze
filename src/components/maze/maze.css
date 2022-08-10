@@ -1,7 +1,13 @@
 .maze{
     position: relative;
-    display: block;
-    width: 80%;
-    height: 80%;
+    display: grid;
+    grid-template-columns:repeat(15, 1fr);
+    grid-template-rows: repeat(15, 1fr);
+    gap: 2px;
+    width: 90%;
+    height: 90%;
     background-color: aqua;
+    grid-area: D;
+   justify-self: center;
+   align-self: center;
 }
