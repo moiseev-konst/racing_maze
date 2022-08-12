@@ -1,6 +1,6 @@
 import "./App.css";
 import Maze from "./components/maze/maze";
-import "./components/maze/maze.css";
+//import "./components/maze/maze.css";
 import Game from "./components/game/game";
 import "./components/game/game.css";
 
@@ -9,7 +9,7 @@ function App() {
     <div className="App">
       <Game>
         game
-        <Maze>Maze</Maze>
+        <Maze/>
       </Game>
       
     </div>
