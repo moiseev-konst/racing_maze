@@ -1,9 +1,11 @@
-export default function parseIndexToCoordinates(index) {
-    let row = Number.parseInt(index / this.column);
-    let column = indexobj.index - row * indexObj.column;
+ function convertIndexToCoordinates(index, size) {
+    let row = Number.parseInt(index / size.column);
+    let column = index.index - row * index.column;
     return { row, column, index };
 }
 
-export default function parseCoordinatesToIndex(coordinateObject) {
-    return coordinateObject.row * this.gameSize.column + coordinateObject.column;
+ function convertCoordinatesToIndex(coordinate) {
+    return coordinate.row * coordinate.size +  coordinate.column;
 }
+
+export {convertCoordinatesToIndex, convertIndexToCoordinates}
