@@ -1,11 +1,11 @@
  function convertIndexToCoordinates(index, size) {
     let row = Number.parseInt(index / size.column);
-    let column = index.index - row * index.column;
+    let column = index - row * size.column;
     return { row, column, index };
 }
 
- function convertCoordinatesToIndex(coordinate) {
-    return coordinate.row * coordinate.size +  coordinate.column;
+ function convertCoordinatesToIndex(coordinate,size) {
+    return coordinate.row * size.column +  coordinate.column;
 }
 
 export {convertCoordinatesToIndex, convertIndexToCoordinates}

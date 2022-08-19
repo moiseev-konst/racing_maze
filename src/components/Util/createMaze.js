@@ -37,30 +37,35 @@ export function createMaze(size) {
     return Math.round(Math.random() * 4);
   }
 
-  function checkCell(index) {
+ /* function checkCell(index) {
     if (arrCheckCell[index]) {
       arrCheckCell[index] = 0;
       return index;
     }
-  }
+  }*/
 
-  function checkBorders(index) {
-    let coordinateCell = convertIndexToCoordinates(index, size);
-    const outsideTop = coordinateCell.row < 0;
-    const outsideLeft = coordinateCell.column < 0;
-    const outsideBottom = coordinateCell.row > row - 1;
-    const outsideRight = coordinateCell.column > column - 1;
+  function checkBorders(coordinateCell) {
+    
+    const outsideTop = coordinateCell.row >= 0;
+    const outsideLeft = coordinateCell.column >=0;
+    const outsideBottom = coordinateCell.row < row ;
+    const outsideRight = coordinateCell.column <column;
+
     return outsideTop && outsideLeft && outsideBottom && outsideRight;
   }
 
   function move(index) {
     let side = getRandomSide();
+    let moveIndex
     let coordinateCell = convertIndexToCoordinates(index, size);
     let coordinateNextCell = {
-      row: coordinateCell.row + coordinateSurroundingElements[side].x,
-      column: coordinateCell.column + coordinateSurroundingElements[side].y,
+      row: coordinateCell.row + coordinateSurroundingElements[side].y,
+      column: coordinateCell.column + coordinateSurroundingElements[side].x,
     };
-    let moveIndex = convertCoordinatesToIndex(coordinateNextCell);
+    if(checkBorders(coordinateNextCell)){
+        moveIndex = convertCoordinatesToIndex(coordinateNextCell,size);
+    }
+    
     return moveIndex;
   }
 
@@ -69,12 +74,14 @@ export function createMaze(size) {
   function createMazeLine(index) {
     const line = [];
     let nextIndex;
-    while (checkCell(index)) {
+    while (arrCheckCell[index]) {
+        arrCheckCell[index]=0  
       line.push(index);
       nextIndex = move(index);
-      while (!checkBorders(nextIndex)) {
+      while (!nextIndex||nextIndex===line[line.length-2]) {
         nextIndex = move(index);
       }
+      index=nextIndex
     }
     return line;
   }
@@ -89,12 +96,13 @@ export function createMaze(size) {
   function createModelMaze() {
     modelMaze.push(createMazeLine(firstCell));
     let index = nextIndex();
-    while (index) {
-      modelMaze.push(createMazeLine(firstCell));
+    while (index||index=='0') {
+      modelMaze.push(createMazeLine(index));
       index = nextIndex();
     }
   }
-  //getRandomSide()
-
+  
+createModelMaze()
+console.log(modelMaze)
   return maze;
 }
