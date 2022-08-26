@@ -8,7 +8,7 @@ export function createMaze(size) {
   let column = size.column;
   let maze = [];
   const modelMaze = [];
-  const arrCheckCell = Array(225);
+  const arrCheckCell = Array(column*row);
   for (let i = 0; i < arrCheckCell.length; i++) {
     arrCheckCell[i] = i;
   }
@@ -63,14 +63,16 @@ export function createMaze(size) {
         };
       })
       .filter((obj) => {
-        return checkBorders(obj) && arrCheckCell[obj.index];
+        return checkBorders(obj);
       });
     return possibleCell;
   }
 
   function nextMove(index) {
     let coordinateCell = convertIndexToCoordinates(index, size);
-    let possibleNextCell = isPossibleCell(coordinateCell);
+    let possibleNextCell = isPossibleCell(coordinateCell).filter((el) => {
+      return arrCheckCell[el.index];
+    });
     let randMove =
       possibleNextCell.length > 0
         ? possibleNextCell[
@@ -81,27 +83,27 @@ export function createMaze(size) {
     return randMove;
   }
 
-  const firstCell = Math.round(Math.random() * 225);
- function breakWall(index, nextIndex){
+  const firstCell = Math.round(Math.random() * column*row);
+  function breakWall(index, nextIndex) {
     switch (nextIndex.move) {
-        case 0:
-          maze[index].borderLeft = false;
-          maze[nextIndex.index].borderRight = false;
-          break;
-        case 1:
-          maze[index].borderTop = false;
-          maze[nextIndex.index].borderBottom = false;
-          break;
-        case 2:
-          maze[index].borderRight = false;
-          maze[nextIndex.index].borderLeft = false;
-          break;
-        case 3:
-          maze[index].borderBottom = false;
-          maze[nextIndex.index].borderTop = false;
-          break;
-      }
- }
+      case 0:
+        maze[index].borderLeft = false;
+        maze[nextIndex.index].borderRight = false;
+        break;
+      case 1:
+        maze[index].borderTop = false;
+        maze[nextIndex.index].borderBottom = false;
+        break;
+      case 2:
+        maze[index].borderRight = false;
+        maze[nextIndex.index].borderLeft = false;
+        break;
+      case 3:
+        maze[index].borderBottom = false;
+        maze[nextIndex.index].borderTop = false;
+        break;
+    }
+  }
   function createMazeLine(index) {
     const line = [];
     let nextIndex;
@@ -112,8 +114,8 @@ export function createMaze(size) {
       if (!nextIndex) {
         return line;
       }
-      breakWall(index,nextIndex)
-    
+      breakWall(index, nextIndex);
+
       index = nextIndex.index;
     }
   }
@@ -150,13 +152,89 @@ export function createMaze(size) {
   }
 
   createModelMaze();
-  /*modelMaze.forEach((line)=>{
-    let randomCell=Math.round(Math.random() *line.length)
-    maze[randomCell].borderLeft = false;
-    maze[randomCell].borderRight= false
-    maze[randomCell].borderTop = false;
-    maze[randomCell].borderBottom= false
-    })*/
+
+  function searchIndexInModel(index) {
+    for (let i = 0; i < modelMaze.length; i++) {
+      if (modelMaze[i].indexOf(index) > 0) {
+        return i;
+      }
+    }
+  }
+  let mainLine =modelMaze[0]
+  function connectAdjacentArr() {
+   
+    modelMaze.forEach((line) => {
+      line.forEach((cell) => {
+        let possible = isPossibleCell(
+          convertIndexToCoordinates(cell, size)
+        ).filter((el) => {
+          return mainLine.indexOf(el.index) < 0;
+        });
+        if (possible.length > 0) {
+          possible.forEach((pos) => {
+            let modelIndex = searchIndexInModel(pos.index);
+            if (modelIndex) {
+              mainLine = [...mainLine, ...modelMaze[modelIndex]];
+ //             modelMaze.splice(modelIndex, 1);
+              breakWall(cell, pos)
+            } else {
+              mainLine.push(pos.index);
+              breakWall(cell,pos)
+            }
+          });
+        }
+      });
+    });
+  }
+ 
+  /* for (let i = 0; i < modelMaze.length; i++) {
+      modelMaze[i].forEach((cell) => {
+        let possible = isPossibleCell(
+          convertIndexToCoordinates(cell, size)
+        ).filter((el) => {
+          return modelMaze[i].indexOf(el.index) < 0;
+        });
+
+        if (possible.length > 0) {
+          possible.forEach((el) => {
+            let serachLine = searchIndexInModel(el.index);
+            console.log(serachLine);
+            if (!serachLine||serachLine===0) {
+              let possible = isPossibleCell(
+                convertIndexToCoordinates(el.index, size)
+              );
+              modelMaze[
+                searchIndexInModel(
+                  possible[Math.round(Math.random() * (possible.length - 1))].index
+                )
+              ].push(el.index);
+              breakWall(el.index, el);
+            } else if (
+              !modelMaze[i].some((i) => {
+                return modelMaze[serachLine].includes(i);
+              })
+            ) {
+              modelMaze[i].push(el.index);
+              modelMaze[searchIndexInModel(el.index)].push(cell);
+              breakWall(cell, el);
+            }
+          });
+        }
+      });
+    }
+
+   modelMaze.forEach((line)=>{
+       
+       
+        let randomCell=Math.round(Math.random() *line.length)
+        maze[randomCell].borderLeft = false;
+        maze[randomCell].borderRight= false
+        maze[randomCell].borderTop = false;
+        maze[randomCell].borderBottom= false
+        })*/
+
+  connectAdjacentArr();
+  console.log(mainLine)
   console.log(modelMaze);
   console.log(maze);
   return maze;
