@@ -7,6 +7,7 @@ import App from './App.js';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+//const test=root.addEvenListener('keyup', e=>console.log(e))
 root.render(
   <React.StrictMode>
     <App/>

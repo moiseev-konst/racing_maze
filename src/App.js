@@ -9,8 +9,15 @@ function App() {
   console.log("size")
   const [maze, setMaze] = useState(createMaze(size));
   
-  return (
-    <div className="App">
+  //const test = document.querySelector("body");
+  //console.log(test)
+  //test.addEventListener('keyDown', keyHandler)
+  document.body.addEventListener('keyup', e=>keyHandler(e));
+  function keyHandler (e){
+       console.log(e)
+  }
+   return (
+    <div className="App"  id="App">
       <Game maze={maze}></Game>
       
     </div>
