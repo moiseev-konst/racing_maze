@@ -1,4 +1,4 @@
-.cell{
+.cell {
     position: relative;
     display: flex;
     justify-content: center;
@@ -6,17 +6,24 @@
     background-color: white;
     color: black;
     font-size: large;
-      
 }
-.borderLeft{
+
+.borderLeft {
     border-left: 2px solid black
 }
-.borderBottom{
+
+.borderBottom {
     border-bottom: 2px solid black
 }
-.borderRight{
+
+.borderRight {
     border-right: 2px solid black
 }
-.borderTop{
+
+.borderTop {
     border-top: 2px solid black
+}
+
+.mouse {
+    background-color: yellow;
 }
