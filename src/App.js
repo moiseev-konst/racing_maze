@@ -23,7 +23,6 @@ function App() {
   }
   createNewGame();
 
-
   useEffect(() => {
     document.body.addEventListener("keydown", keyHandler);
 
@@ -83,7 +82,16 @@ function App() {
       document.body.removeEventListener("keydown", keyHandler);
     };
   });
+useEffect(()=>{
 
+  document.body.addEventListener("keydown", keyHandler);
+  function keyHandler(e){
+    console.log(e.keyCode)
+  }
+  return () => {
+    document.body.removeEventListener("keydown", keyHandler);
+  };
+})
   //37 left; 38 top; 39 right; 40 down
   //console.log(maze);
 
