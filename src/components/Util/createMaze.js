@@ -20,9 +20,11 @@ export function createMaze(param) {
                 borderTop: true,
                 borderBottom: true,
                 borderRight: true,
-                mouse: null,
+                whiteMouse: null,
+                blackMouse: null,
                 blackHole: null,
                 whiteHole: null,
+                cheese:null
             });
         }
     })();

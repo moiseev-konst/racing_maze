@@ -10,13 +10,16 @@ function App() {
   const [size, setSize] = useState({ row: 20, column: 20 });
   //console.log(size);
   const [maze, setMaze] = useState(undefined);
-  const [move, setMove] = useState(0);
+  const [whiteMouseMove, setWhiteMouseMove] = useState(0);
+  const [blackMouseMove, setBlackMouseMove] = useState(0);
   const [lastMove, setLastMove] = useState(undefined);
 
   function createNewGame() {
     if (!maze) {
       let newMaze = createMaze(size);
-      newMaze[0].mouse = true;
+      newMaze[0].whiteMouse = true;
+      newMaze[19].blackMouse = true;
+      newMaze[390].cheese= true;
       console.log("mouse!");
       setMaze(newMaze);
     }
@@ -27,18 +30,18 @@ function App() {
     document.body.addEventListener("keydown", keyHandler);
 
     function keyHandler(e) {
-      let possibMove = possibleMove(move, size.column);
+      let possibMove = possibleMove(whiteMouseMove, size.column);
       console.log(possibMove);
       function checkBorder(step) {
         switch (step) {
           case 0:
-            return maze[move].borderLeft;
+            return maze[whiteMouseMove].borderLeft;
           case 1:
-            return maze[move].borderTop;
+            return maze[whiteMouseMove].borderTop;
           case 2:
-            return maze[move].borderRight;
+            return maze[whiteMouseMove].borderRight;
           case 3:
-            return maze[move].borderBottom;
+            return maze[whiteMouseMove].borderBottom;
         }
       }
 
@@ -71,10 +74,10 @@ function App() {
 
     function nextMove(index) {
       let newMaze = maze;
-      newMaze[move].mouse = false;
-      newMaze[index].mouse = true;
-      setLastMove(move);
-      setMove(index);
+      newMaze[whiteMouseMove].whiteMouse = false;
+      newMaze[index].whiteMouse = true;
+      setLastMove(whiteMouseMove);
+      setWhiteMouseMove(index);
       setMaze(newMaze);
     }
 
