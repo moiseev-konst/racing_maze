@@ -5,6 +5,7 @@ import { useState } from "react";
 import { createMaze } from "./components/Util/createMaze.js";
 import possibleMove from "./components/Util/possibleMove";
 import { useEffect } from "react";
+import { createTimer } from "./components/Util/timer.js";
 
 function App() {
   const [size, setSize] = useState({ row: 20, column: 20 });
@@ -19,16 +20,22 @@ function App() {
       let newMaze = createMaze(size);
       newMaze[0].whiteMouse = true;
       newMaze[19].blackMouse = true;
-      newMaze[390].cheese= true;
+      newMaze[390].cheese = true;
       console.log("mouse!");
       setMaze(newMaze);
     }
   }
   createNewGame();
-
+  const timer = createTimer();
+  timer.onTick = function (){
+   console.log("hi");
+ };
+  console.log(timer);
   useEffect(() => {
     document.body.addEventListener("keydown", keyHandler);
-
+    if (!timer.timerId) {
+    timer.startTimer();
+    }
     function keyHandler(e) {
       let possibMove = possibleMove(whiteMouseMove, size.column);
       console.log(possibMove);
@@ -85,6 +92,9 @@ function App() {
       document.body.removeEventListener("keydown", keyHandler);
     };
   });
+
+  useEffect(() => {});
+  /*
 useEffect(()=>{
 
   document.body.addEventListener("keydown", keyHandler);
@@ -94,7 +104,8 @@ useEffect(()=>{
   return () => {
     document.body.removeEventListener("keydown", keyHandler);
   };
-})
+})*/
+
   //37 left; 38 top; 39 right; 40 down
   //console.log(maze);
 
