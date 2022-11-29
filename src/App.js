@@ -6,14 +6,19 @@ import { createMaze } from "./components/Util/createMaze.js";
 import possibleMove from "./components/Util/possibleMove";
 import { useEffect } from "react";
 import { createTimer } from "./components/Util/timer.js";
+import checkNextMove from "./components/Util/checkNextMove";
+import findSimplWay from "./components/Util/findSimplWay";
 
 function App() {
   const [size, setSize] = useState({ row: 20, column: 20 });
   //console.log(size);
   const [maze, setMaze] = useState(undefined);
   const [whiteMouseMove, setWhiteMouseMove] = useState(0);
-  const [blackMouseMove, setBlackMouseMove] = useState(0);
-  const [lastMove, setLastMove] = useState(undefined);
+  const [blackMouseMove, setBlackMouseMove] = useState(19);
+  const [lastWhiteMove, setLastWhiteMove] = useState(undefined);
+  const [lastBlackMove, setLastBlackMove] = useState(undefined);
+  const [time, setTime] = useState(undefined);
+  const [tick, setTick] = useState(0);
 
   function createNewGame() {
     if (!maze) {
@@ -25,21 +30,51 @@ function App() {
       setMaze(newMaze);
     }
   }
+
   createNewGame();
+
   const timer = createTimer();
-  timer.onTick = function (){
-   console.log("hi");
- };
-  console.log(timer);
+
+
+  timer.onTick = () => setTick(prev=>prev+1);
   useEffect(() => {
+    // timer.onTick = () => {};
+    /* timer.onTick =()=> blackfuck(blackMouseMove);
+    function blackfuck(blackMouseMove) {
+      console.log(blackMouseMove);
+      nextBlackMouseMove(
+        checkNextMove(blackMouseMove, Math.round(Math.random() * 3), maze, size)
+      );
+    }*/
+    console.log(tick + "1");
     document.body.addEventListener("keydown", keyHandler);
-    if (!timer.timerId) {
-    timer.startTimer();
-    }
     function keyHandler(e) {
-      let possibMove = possibleMove(whiteMouseMove, size.column);
+      if (!time) {
+        //timer.startTimer();
+        setTime(timer);
+        findSimplWay(19,390,maze,size)
+
+      }
+
+      switch (e.keyCode) {
+        case 37:
+          nextWhiteMouseMove(checkNextMove(whiteMouseMove, 0, maze, size));
+          break;
+        case 38:
+          nextWhiteMouseMove(checkNextMove(whiteMouseMove, 1, maze, size));
+          break;
+        case 39:
+          nextWhiteMouseMove(checkNextMove(whiteMouseMove, 2, maze, size));
+          break;
+        case 40:
+          nextWhiteMouseMove(checkNextMove(whiteMouseMove, 3, maze, size));
+          break;
+      }
+
+      /*let possibMove = possibleMove(whiteMouseMove, size.column);
       console.log(possibMove);
-      function checkBorder(step) {
+
+      function checkMazeBorder(step) {
         switch (step) {
           case 0:
             return maze[whiteMouseMove].borderLeft;
@@ -56,8 +91,8 @@ function App() {
         if (possibMove.length > 0) {
           for (let i = 0; i < possibMove.length; i++) {
             if (possibMove[i].move == posMove) {
-              if (!checkBorder(possibMove[i].move)) {
-                nextMove(possibMove[i].index);
+              if (!checkMazeBorder(possibMove[i].move)) {
+                nextWhiteMouseMove(possibMove[i].index);
               }
             }
           }
@@ -76,24 +111,83 @@ function App() {
         case 40:
           findMove(3);
           break;
-      }
-    }
+      }*/
+      /*function checkNextMove(mouseMove, moveIndex) {
+        
+        let possiblMove = possibleMove(mouseMove, size.column);
+        // console.log(possiblMove);
 
-    function nextMove(index) {
-      let newMaze = maze;
-      newMaze[whiteMouseMove].whiteMouse = false;
-      newMaze[index].whiteMouse = true;
-      setLastMove(whiteMouseMove);
-      setWhiteMouseMove(index);
-      setMaze(newMaze);
+        function checkMazeBorder(step) {
+          switch (step) {
+            case 0:
+              return maze[mouseMove].borderLeft;
+            case 1:
+              return maze[mouseMove].borderTop;
+            case 2:
+              return maze[mouseMove].borderRight;
+            case 3:
+              return maze[mouseMove].borderBottom;
+          }
+        }
+
+        if (possiblMove.length > 0) {
+          for (let i = 0; i < possiblMove.length; i++) {
+            if (possiblMove[i].move == moveIndex) {
+              if (!checkMazeBorder(possiblMove[i].move)) {
+                return possiblMove[i].index;
+              }
+            }
+          }
+        }
+      }*/
+    }
+/*
+    function nextBlackMouseMove(index) {
+      if (index == 0 || index) {
+        let newMaze = maze;
+        newMaze[blackMouseMove].blackMouse = false;
+        newMaze[index].blackMouse = true;
+        setLastBlackMove(blackMouseMove);
+        console.log(blackMouseMove);
+        setBlackMouseMove(index);
+        setMaze(newMaze);
+      }
+    }*/
+
+    function nextWhiteMouseMove(index) {
+      if (index == 0 || index) {
+        let newMaze = maze;
+        newMaze[whiteMouseMove].whiteMouse = false;
+        newMaze[index].whiteMouse = true;
+        setLastWhiteMove(whiteMouseMove);
+        setWhiteMouseMove(index);
+        setMaze(newMaze);
+      }
     }
 
     return () => {
       document.body.removeEventListener("keydown", keyHandler);
     };
-  });
+  }, [maze, whiteMouseMove]);
 
-  useEffect(() => {});
+  useEffect(() => {
+
+    function nextBlackMouseMove(index) {
+      if (index == 0 || index) {
+        let newMaze = maze;
+        newMaze[blackMouseMove].blackMouse = false;
+        newMaze[index].blackMouse = true;
+        setLastBlackMove(blackMouseMove);
+        console.log(blackMouseMove);
+        setBlackMouseMove(index);
+        setMaze(newMaze);
+      }
+    }
+    nextBlackMouseMove(
+      checkNextMove(blackMouseMove, Math.round(Math.random() * 3), maze, size)
+    )
+    console.log(tick + "2");
+  }, [maze, blackMouseMove, tick]);
   /*
 useEffect(()=>{
 
