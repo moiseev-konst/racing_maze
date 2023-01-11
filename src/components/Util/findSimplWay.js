@@ -2,90 +2,86 @@ import possibleMove from "./possibleMove";
 import checkMazeBorder from "./checkMazeBorder";
 
 export default function findSimplWay(
-  mousePosition,
-  cheesePosition,
-  maze,
-  size
+    mousePosition,
+    cheesePosition,
+    maze,
+    size
 ) {
-  const arrModelMaze = Array(maze.length).fill(null);
-  arrModelMaze[mousePosition] = 0;
-  arrModelMaze[cheesePosition] = -1;
-  let memoryArr = [];
-  const way = [];
-  let stepIteration = 1;
-  memoryArr.push(mousePosition);
+    const arrModelMaze = Array(maze.length).fill(null);
+    arrModelMaze[mousePosition] = 0;
+    arrModelMaze[cheesePosition] = -1;
+    let memoryArr = [];
+    const way = [];
+    let stepIteration = 1;
+    memoryArr.push(mousePosition);
+    let end = false
 
-  function checkCells(index) {
-    return arrModelMaze[index];
-  }
+    function findWay(mousePosition) {
+        let frontWave = [mousePosition];
+        let arr = [];
 
-  //function filterPosiblMove(position) {}
+        function recordStep(cells) {
+            let posMove = possibleMove(cells, size.column);
 
-  function findWay(mousePosition) {
-    let frontWave = [mousePosition];
+            let check = posMove.filter((el) => {
+                return arrModelMaze[el.index] === null || arrModelMaze[el.index] === -1
+            });
 
-    let arr = [];
+            let filterCells = check.filter((el) => {
+                return !checkMazeBorder(el.move, maze, cells);
+            });
 
-    function isEnd(arr) {
-      return arr.some((el) => {
-       
-        return arrModelMaze[el] !== -1;
-      });
-    }
+            filterCells.forEach((el) => {
+                if (arrModelMaze[el.index] !== -1) {
+                    arrModelMaze[el.index] = stepIteration;
+                    arr.push(el.index);
 
-    function recordStep(cells) {
-      let posMove = possibleMove(cells, size.column);
-
-      let check = posMove.filter((el) => {
-      return arrModelMaze[el.index]!==0&&arrModelMaze[el.index]===null
-        // return !checkCells(el.index);
-      });
-
-      let filterCells = check.filter((el) => {
-        return !checkMazeBorder(el.move, maze, cells);
-      });
-
-      filterCells.forEach((el) => {
-        arrModelMaze[el.index] = stepIteration;
-        arr.push(el.index);
-      });
-    }
-let it=0
-    while (isEnd(frontWave)) {
-        frontWave.forEach((el)=>{recordStep(el)})
-        frontWave=arr
-        arr=[]
-        stepIteration = stepIteration + 1;
-        console.log('Start');
-        it++
-        if(it>500){
-            break
+                } else {
+                    arrModelMaze[el.index] = stepIteration;
+                    end = true
+                    recordWay(el.index)
+                }
+            });
         }
+
+        function recordWay(cells) {
+            let indexCell = cells
+            let orderNumber = arrModelMaze[indexCell]
+            while (orderNumber > 0) {
+                let suroundCells = possibleMove(indexCell, size.column).filter((el) => {
+                    return !checkMazeBorder(el.move, maze, indexCell)
+                }).map((el) => { return el.index })
+                let filterCell = suroundCells.filter((el) => { return arrModelMaze[el] < arrModelMaze[indexCell] && arrModelMaze[el] !== null })
+                way.push(indexCell)
+                indexCell = filterCell.pop()
+                orderNumber = arrModelMaze[indexCell]
+                console.log(orderNumber)
+            }
+            console.log(way)
+        }
+
+        let it = 0
+        while (!end) {
+            if (it > 500) {
+                break
+            }
+            frontWave.forEach((el) => { recordStep(el) })
+            frontWave = arr
+            arr = []
+            stepIteration = stepIteration + 1;
+            console.log('Start');
+            it++
+
+        }
+
+        console.log('End');
+
     }
-    console.log('End');
-    console.log(frontWave);
-    }
 
-    /* 
-    for (let i = 0; i < frontWave.length; i++) {
-      memoryArr = [...memoryArr, ...filterCells];
-      console.log(posMove);
-      console.log(check);
-      console.log(filterCells);
-    }
+    findWay(mousePosition);
+    console.log(arrModelMaze);
+    console.log(memoryArr);
+    console.log(way);
 
-    filterCells.forEach((el) => {
-             memoryArr.push(el.index)
-             arrModelMaze[el.index] = stepIteration + 1
-
-         })*/
-
-    
-  
-  findWay(mousePosition);
-  console.log(arrModelMaze);
-  console.log(memoryArr);
-  console.log(way);
-
-  return way;
+    return way;
 }
