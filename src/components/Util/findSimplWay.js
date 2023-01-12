@@ -10,11 +10,9 @@ export default function findSimplWay(
     const arrModelMaze = Array(maze.length).fill(null);
     arrModelMaze[mousePosition] = 0;
     arrModelMaze[cheesePosition] = -1;
-    let memoryArr = [];
-    const way = [];
+       const way = [];
     let stepIteration = 1;
-    memoryArr.push(mousePosition);
-    let end = false
+       let end = false
 
     function findWay(mousePosition) {
         let frontWave = [mousePosition];
@@ -80,8 +78,7 @@ export default function findSimplWay(
 
     findWay(mousePosition);
     console.log(arrModelMaze);
-    console.log(memoryArr);
-    console.log(way);
+      console.log(way);
 
     return way;
 }

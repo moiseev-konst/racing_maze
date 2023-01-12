@@ -16,9 +16,10 @@ function App() {
   const [whiteMouseMove, setWhiteMouseMove] = useState(0);
   const [blackMouseMove, setBlackMouseMove] = useState(19);
   const [lastWhiteMove, setLastWhiteMove] = useState(undefined);
-  const [lastBlackMove, setLastBlackMove] = useState(undefined);
+  const [nextBlackMove, setNextBlackMove] = useState(undefined);
   const [time, setTime] = useState(undefined);
   const [tick, setTick] = useState(0);
+  const [way, setWay] = useState(undefined);
 
   function createNewGame() {
     if (!maze) {
@@ -28,16 +29,34 @@ function App() {
       newMaze[390].cheese = true;
       console.log("mouse!");
       setMaze(newMaze);
+      let newWay = findSimplWay(19, 390, newMaze, size);
+      setWay(newWay);
     }
   }
 
   createNewGame();
 
   const timer = createTimer();
-
-
-  timer.onTick = () => setTick(prev=>prev+1);
+  /* function findWay(){
+    //let newWay =findSimplWay(19,390,maze,size)
+    setWay(()=>{findSimplWay(19,390,maze,size)})
+    console.log(way)
+  }*/
+  timer.onTick = () => setNextBlackMove(() => way.pop())
+  //timer.onTick = () => setTick((prev) => prev + 1);
+  // setWay(()=>{findSimplWay(19,390,maze,size)})
   useEffect(() => {
+    /* timer.onTick =(way)=> {
+      console.log(way)
+      if(way){
+        let getNextIndex = way.pop();
+
+        nextBlackMouseMove(getNextIndex);
+      }
+    
+         // setWay(getNextIndex)
+          }
+  
     // timer.onTick = () => {};
     /* timer.onTick =()=> blackfuck(blackMouseMove);
     function blackfuck(blackMouseMove) {
@@ -50,10 +69,10 @@ function App() {
     document.body.addEventListener("keydown", keyHandler);
     function keyHandler(e) {
       if (!time) {
-        //timer.startTimer();
+        // findWay()
+        timer.startTimer();
         setTime(timer);
-        findSimplWay(19,390,maze,size)
-
+        console.log(way);
       }
 
       switch (e.keyCode) {
@@ -141,18 +160,18 @@ function App() {
         }
       }*/
     }
-/*
+
     function nextBlackMouseMove(index) {
       if (index == 0 || index) {
         let newMaze = maze;
         newMaze[blackMouseMove].blackMouse = false;
         newMaze[index].blackMouse = true;
-        setLastBlackMove(blackMouseMove);
+        setNextBlackMove(blackMouseMove);
         console.log(blackMouseMove);
         setBlackMouseMove(index);
         setMaze(newMaze);
       }
-    }*/
+    }
 
     function nextWhiteMouseMove(index) {
       if (index == 0 || index) {
@@ -171,23 +190,25 @@ function App() {
   }, [maze, whiteMouseMove]);
 
   useEffect(() => {
+   // let nextMove = way.pop();
 
     function nextBlackMouseMove(index) {
       if (index == 0 || index) {
         let newMaze = maze;
         newMaze[blackMouseMove].blackMouse = false;
         newMaze[index].blackMouse = true;
-        setLastBlackMove(blackMouseMove);
-        console.log(blackMouseMove);
+        //setBlackMouseMove(index);
+        //console.log(blackMouseMove);
         setBlackMouseMove(index);
         setMaze(newMaze);
       }
     }
     nextBlackMouseMove(
-      checkNextMove(blackMouseMove, Math.round(Math.random() * 3), maze, size)
-    )
-    console.log(tick + "2");
-  }, [maze, blackMouseMove, tick]);
+      nextBlackMove
+      //checkNextMove(blackMouseMove, Math.round(Math.random() * 3), maze, size)
+    );
+    // console.log(tick + "2");
+  }, [maze, nextBlackMove, tick]);
   /*
 useEffect(()=>{
 

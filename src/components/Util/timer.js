@@ -1,7 +1,7 @@
 class Timer {
     constructor() {
             this.timerId = null;
-            this.updateTime = 100;
+            this.updateTime = 200;
         }
         /* get updateTime() {
           return this.updateTime;
