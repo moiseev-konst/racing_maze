@@ -43,8 +43,7 @@ function App() {
     console.log(way)
   }*/
   timer.onTick = () => setNextBlackMove(() => way.pop())
-  //timer.onTick = () => setTick((prev) => prev + 1);
-  // setWay(()=>{findSimplWay(19,390,maze,size)})
+ 
   useEffect(() => {
     /* timer.onTick =(way)=> {
       console.log(way)
