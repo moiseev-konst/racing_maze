@@ -1,7 +1,7 @@
 class Timer {
     constructor() {
             this.timerId = null;
-            this.updateTime = 200;
+            this.updateTime = 300;
         }
         /* get updateTime() {
           return this.updateTime;
@@ -11,8 +11,9 @@ class Timer {
         }*/
 
     onTick = () => {}
-    startTimer() {
+    startTimer(time) {
         this.resetTimer();
+        this.updateTime = time
         this.tick();
     }
     stopTimer() {

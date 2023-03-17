@@ -15,10 +15,11 @@ export default function Cell(props) {
     let top = cell.borderTop ? " border-top: 2px solid black; " : "";
     console.log(left + bottom + right + top);
     return left + bottom + right + top;
-  };*/
+  };
+  <p> {props.id} </p>{" "}*/
   return (
     <div className={"cell" + left + bottom + right + top + whiteMouse+blackMouse+cheese} id={props.id}>
-      <p> {props.id} </p>{" "}
+     
     </div>
   );
 }
