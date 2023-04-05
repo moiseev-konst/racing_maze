@@ -2,6 +2,7 @@ import Cell from "../Cell/cell";
 import "../Cell/cell.css";
 
 export default function Maze(props) {
+  console.log('render maze')
  const mazeGrid={
   gridTemplateColumns:`repeat(${props.size.column}, 1fr)`,
   gridTemplateRows:`repeat(${props.size.row}, 1fr)`

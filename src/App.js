@@ -9,10 +9,10 @@ import checkNextMove from "./components/Util/checkNextMove";
 import findSimplWay from "./components/Util/findSimplWay";*/
 
 function App() {
- 
+  console.log('render app')
   return (
     <div className="App" id="App">
-      <Game /*maze={maze}*/ size= {{ row: 15, column: 15}} time={500}> </Game>
+      <Game /*maze={maze}*/ size= {{ row: 15, column: 15}} time={300}> </Game>
     </div>
   );
 }
