@@ -11,7 +11,7 @@ import findSimplWay from "../Util/findSimplWay";
 import { gameLogic } from "../Util/gameLogic.js";
 
 export default function Game(props) {
-  console.log("render game");
+  //console.log("render game");
   const [size, setSize] = useState(props.size);
   const [maze, setMaze] = useState(undefined);
   const [whiteMouseMove, setWhiteMouseMove] = useState(0);
@@ -35,10 +35,19 @@ export default function Game(props) {
       setMaze(newMaze);
       let newWay = findSimplWay(blackMouseMove, cheese, newMaze, size);
       setWay(newWay);
+
     }
   }
-
+function createHole(){
+  
+}
   function nextWhiteMouseMove(direction) {
+    if (!time) {
+      timer.current.startTimer(props.time);
+      setTime(timer);
+      console.log(way);
+    }
+
     let index = checkNextMove(whiteMouseMove, direction, maze, size);
     if (index == 0 || index) {
       let newMaze = maze;
@@ -54,20 +63,12 @@ export default function Game(props) {
       let newMaze = maze;
       newMaze[blackMouseMove].blackMouse = false;
       newMaze[index].blackMouse = true;
-      //setBlackMouseMove(index);
-      //console.log(blackMouseMove);
       setBlackMouseMove(index);
       setMaze(newMaze);
     }
   }
 
   function keyHandler(e) {
-    if (!time) {
-      timer.current.startTimer(props.time);
-      setTime(timer);
-      console.log(way);
-    }
-
     switch (e.keyCode) {
       case 37:
         nextWhiteMouseMove(0);
@@ -122,7 +123,7 @@ export default function Game(props) {
     setStopGame(true);
   }
   createNewGame();
-  console.log({ gameLogic });
+
   const timer = useRef(createTimer());
 
   timer.current.onTick = () => setNextBlackMove(() => way.pop());

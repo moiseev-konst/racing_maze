@@ -1,5 +1,5 @@
 export default function Menu(props) {
-  console.log('render menu')
+  //console.log('render menu')
   return (
     <div className="menu">
       <div className="menu_item">start</div>
