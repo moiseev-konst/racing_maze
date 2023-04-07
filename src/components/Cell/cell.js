@@ -1,3 +1,6 @@
+import Hole from "../Hole/hole.js";
+import "../Hole/hole.css";
+
 export default function Cell(props) {
   //console.log(props)
   let left = props.borderCell.borderLeft ? " borderLeft " : "";
@@ -19,7 +22,9 @@ export default function Cell(props) {
   <p> {props.id} </p>{" "}*/
   return (
     <div className={"cell" + left + bottom + right + top + whiteMouse+blackMouse+cheese} id={props.id}>
-     
+     {props.whiteHole? <Hole blackHole={props.blackHole} />:null } 
+     {props.blackHole? <Hole  blackHole={props.blackHole} className="blackHole"/>:null } 
+
     </div>
   );
 }

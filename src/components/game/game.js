@@ -33,14 +33,35 @@ export default function Game(props) {
       newMaze[cheese].cheese = true;
       console.log("mouse!");
       setMaze(newMaze);
+      setMaze((maze)=>createHole(maze))
       let newWay = findSimplWay(blackMouseMove, cheese, newMaze, size);
       setWay(newWay);
-
     }
   }
-function createHole(){
-  
-}
+  function createHole(maze) {
+    let mazeWhisHole=maze
+    let count = Math.round(maze.length / 25);
+    let hole = [];
+    while (count >= 0) {
+      let random = Math.round(Math.random() * maze.length);
+      if (random != 0 && size.row - 1&&hole.indexOf(random)<0) {
+        hole.push(random);
+        count--;
+      }
+    }
+    let blackHole = hole.slice(0, hole.length / 2);
+    let whiteHole = hole.slice( hole.length / 2, hole.length);
+    blackHole.map((el) => {
+      mazeWhisHole[el].blackHole = true;
+    });
+    whiteHole.map((el) => {
+      mazeWhisHole[el].whiteHole = true;
+    });
+    console.log(hole)
+    console.log(blackHole)
+    console.log(whiteHole)
+    return mazeWhisHole
+  }
   function nextWhiteMouseMove(direction) {
     if (!time) {
       timer.current.startTimer(props.time);
